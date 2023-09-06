@@ -15,6 +15,7 @@ import { styled } from "@mui/material/styles";
 import React, { useState } from "react";
 
 export default function Header() {
+  // const navigate = useNavigate()
   const StyledAppBar = styled(AppBar)({
     backgroundColor: "white",
     boxShadow:
@@ -37,9 +38,8 @@ export default function Header() {
   };
 
   const handleLogout = () => {
-    // Implement your logout logic here
-    // For example, clearing user session or calling an API
-    // After logout, you can close the drawer if needed
+    localStorage.removeItem("authToken");
+    // navigate("/login");
     setDrawerOpen(false);
   };
 

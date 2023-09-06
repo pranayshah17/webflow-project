@@ -7,6 +7,7 @@ import ListItems from "./Component/ListItems";
 import Header from "./Header/Header";
 import Login from "./Login/Login";
 import RegistrationPage from "./Login/RegistartionPage";
+import PrivateRoute from "./PrivateRoute";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -26,20 +27,20 @@ function App() {
         <Header/>
     <BrowserRouter>
       <Routes>
-        {/* {isLoggedIn && <Header />} */}
+        {isLoggedIn && <Header />}
         <Route path="/" element={<Login/>} />
         <Route path="/login" element={<Login />} />
         <Route path="/registrationpage" element={<RegistrationPage />} />
         <Route path="/cardcomponent" element={<CardComponent />} />
         <Route path="/listitems" element={<ListItems />} />
-        {/* <Route
+        <Route
           path="/card"
           element={
             <PrivateRoute>
               <CardComponent />
             </PrivateRoute>
           }
-        /> */}
+        />
       </Routes>
     </BrowserRouter>
     </>

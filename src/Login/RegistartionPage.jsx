@@ -7,8 +7,12 @@ import {
   Typography,
 } from "@mui/material";
 import { useFormik } from "formik";
-import React from "react";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import * as Yup from "yup";
+import { userRegister } from "./RegisterSlice";
   
   const validationSchema = Yup.object().shape({
     firstName: Yup.string().required("First Name is required"),
@@ -29,16 +33,44 @@ import * as Yup from "yup";
     contactNumber: "",
     email: "",
     password: "",
-    confirmPassword: "",
+    confirmPassword: "", 
   };
   
   function RegistrationPage() {
+    const [isRegistered, setIsRegistered] = useState(false);
+    const selectResponseData = (state) => state.auth.responseData;
+    const dispatch = useDispatch()
+    const navigate = useNavigate();
+    const responseData = useSelector(selectResponseData);
     const formik = useFormik({
       initialValues,
       validationSchema,
       onSubmit: (values) => {
-        // Handle registration logic here
-        console.log("Form values:", values);
+        // Make sure you're passing the correct field names here
+        dispatch(
+          userRegister({
+            firstName: values.firstName,
+            lastName: values.lastName,
+            email: values.email,
+            password: values.password,
+            confirm_password: values.confirmPassword, 
+            phone_number: values.contactNumber, 
+          })
+        )
+          .then(() => {
+            setIsRegistered(true);
+          formik.resetForm();
+          toast.success("Registered successfully!", {
+            autoClose: 3000, // Close the toast after 3 seconds
+            
+          });
+          navigate("/login");
+          })
+          .catch((error) => {
+            // Handle login error, e.g., display an error message
+            console.log("Error during login:", error.data);
+            // setLoginError("Invalid email or password");
+          });
       },
     });
   
@@ -172,9 +204,14 @@ import * as Yup from "yup";
               >
                 Register
               </Button>
+              <Typography variant="body2" sx={{ marginTop: 2, textAlign: "center" }}>
+              Already have an account?{" "}
+              <Link to="/login">Login here</Link>
+            </Typography>
             </form>
           </Paper>
         </Container>
+        
       </div>
     );
   }
