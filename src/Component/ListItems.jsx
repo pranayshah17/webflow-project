@@ -2,9 +2,11 @@ import { Button, Card, CardContent, Container, List, ListItem, ListItemText, Typ
 import React, { useState } from 'react';
 
 const ListItems = () => {
+
   // Define state to track the index of the hovered item and the selected collection
   const [hoveredItem, setHoveredItem] = useState(-1);
   const [selectedCollection, setSelectedCollection] = useState(null);
+
 
   // Function to handle collection item click
   const handleCollectionClick = (index) => {

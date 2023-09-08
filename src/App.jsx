@@ -4,8 +4,9 @@ import "./Css/App.css";
 // import Header from "./Header/Header";
 import CardComponent from "./Component/CardComponent";
 import ListItems from "./Component/ListItems";
-import Header from "./Header/Header";
+import Layout from "./Layout";
 import Login from "./Login/Login";
+import RedirectToLogin from "./Login/RedirectedToLogin";
 import RegistrationPage from "./Login/RegistartionPage";
 import PrivateRoute from "./PrivateRoute";
 
@@ -24,15 +25,14 @@ function App() {
 
   return (
     <>
-        <Header/>
     <BrowserRouter>
+    <Layout>
       <Routes>
-        {isLoggedIn && <Header />}
-        <Route path="/" element={<Login/>} />
+        <Route path="/" element={<RedirectToLogin/>} />
         <Route path="/login" element={<Login />} />
         <Route path="/registrationpage" element={<RegistrationPage />} />
         <Route path="/cardcomponent" element={<CardComponent />} />
-        <Route path="/listitems" element={<ListItems />} />
+        <Route path="/listitems" element={<ListItems  />} />
         <Route
           path="/card"
           element={
@@ -42,6 +42,7 @@ function App() {
           }
         />
       </Routes>
+      </Layout>
     </BrowserRouter>
     </>
   );

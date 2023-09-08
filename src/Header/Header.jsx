@@ -13,9 +13,10 @@ import {
 import AppBar from "@mui/material/AppBar";
 import { styled } from "@mui/material/styles";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Header() {
-  // const navigate = useNavigate()
+  const navigate = useNavigate()
   const StyledAppBar = styled(AppBar)({
     backgroundColor: "white",
     boxShadow:
@@ -39,7 +40,7 @@ export default function Header() {
 
   const handleLogout = () => {
     localStorage.removeItem("authToken");
-    // navigate("/login");
+    navigate("/login");
     setDrawerOpen(false);
   };
 

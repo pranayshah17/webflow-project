@@ -12,6 +12,7 @@ export const addSiteDetail = createAsyncThunk(
         const headers = {
           Authorization: token,
           "Content-Type": "application/json",
+          "ngrok-skip-browser-warning": true,
         };
         const response = await axios.get("https://b4f5-122-179-159-67.ngrok-free.app/api/v1/wfUser/authorize", {
            headers:headers
