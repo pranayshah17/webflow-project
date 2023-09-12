@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { addSiteDetail } from "./AddSiteSlice";
+import { setCollections, setDefaultCollections } from "./GetCollectionSlice";
 import { userDetail } from "./UserDetailSlice";
 // import { addSiteDetail } from './AddSiteSlice';
 
@@ -67,27 +68,23 @@ const ProfileText = styled(Typography)`
 const CardContainer = () => {
   const navigate = useNavigate();
   const token = useSelector((state) => state.auth.token);
-  const responseDatas = useSelector((state) => state.responseData)
-  
-  console.log(responseDatas, "is it there?");
-// const status = useSelector((state) => state.getCollection.status);
+  const responseDatas = useSelector((state) => state.responseData);
+  console.log(responseDatas, "available data");
   const [userData, setUserData] = useState([]);
- 
+
   const dispatch = useDispatch();
   useEffect(() => {
     async function fetchData() {
       const userDetails = await dispatch(userDetail(token));
-      const userSites = userDetails?.payload.data.userSites;  
+      const userSites = userDetails?.payload.data.userSites;
+      console.log(userDetails?.payload.data, "userDetails?.payload.data");
       setUserData(userDetails?.payload.data);
     }
     fetchData();
   }, [dispatch]);
 
   const handleAddSiteClick = async () => {
-    // Dispatch the addSite action
     const gettingData = await dispatch(addSiteDetail(token));
-    console.log(gettingData, "====> Hello I Am, Getting The Data");
-    console.log(process.env.CLIENT_ID, "client iddddddd");
     const authURL = `https://webflow.com/oauth/authorize?response_type=code&client_id=${process.env.REACT_APP_CLIENT_ID}`;
     window.location.href = authURL;
   };
@@ -113,8 +110,6 @@ const CardContainer = () => {
         )
         .then((response) => {
           console.log("GET request response:", response.data);
-       
-         
         })
         .catch((error) => {
           console.error("GET request error:", error);
@@ -124,12 +119,13 @@ const CardContainer = () => {
 
   console.log(userData, "userData");
 
- const  handleClick = async (userDetails, siteData) => {
-    console.log({userDetails, siteData})
+  const handleClick = async (userDetails, siteData) => {
+    console.log({ userDetails, siteData },"+++++++");
     try {
-        const headers = {
-          Authorization: token,
-          'wfauthorization': userDetails?.wf_access_token,
+      console.log(userDetails?.wf_access_token, "old token");
+      const headers = {
+        Authorization: token,
+        wfauthorization: userDetails?.wf_access_token,
         "Content-Type": "application/json",
         "ngrok-skip-browser-warning": true,
       };
@@ -138,20 +134,18 @@ const CardContainer = () => {
         {
           headers: headers,
         }
-        );
-      console.log(response, "hellooooooo");
+      );
       console.log(response.data.data.collections, "name");
-      // const names = response.data.data.collections?.map(collection => collection.name);
-      // console.log(names);
-      navigate("/listitems")
-    // return names
+      const collectionData = response.data.data.collections;
+      const defaultCollections = response.data.data.defaultCollections;
+
+      dispatch(setCollections(collectionData));
+      dispatch(setDefaultCollections(defaultCollections));
+      navigate("/listitems");
     } catch (error) {
       console.error("Error:", error);
     }
   };
-
-
-   
 
   return (
     <Container maxWidth="xl" sx={{ paddingTop: "50px" }}>
@@ -183,7 +177,7 @@ const CardContainer = () => {
                 <div
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
-                 <StyledButton
+                  <StyledButton
                     variant="contained"
                     color="primary"
                     onClick={() => handleClick(data?.userDetails, userSite)}

@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  data: [],
+  collections: [],
 };
 
 export const getCollection = createAsyncThunk(
@@ -9,22 +9,7 @@ export const getCollection = createAsyncThunk(
     async (token, userToken, siteId) => {
         try {
         console.log({token, userToken, siteId})
-    //   const headers = {
-    //       Authorization: token,
-    //       'wfauthorization': userToken,
-    //     "Content-Type": "application/json",
-    //     "ngrok-skip-browser-warning": true,
-    //   };
-    //   const response = await axios.get(
-    //     `https://b4f5-122-179-159-67.ngrok-free.app/api/v1/collection/getCollections?siteId=${siteId}`,
-    //     {
-    //       headers: headers,
-    //     }
-    //   );
-    //   console.log(response.data, "===> hello Amaan ");
-    //     console.log(response, "hellooooooooo");
-    //     console.log(token, "am i getting token?");
-    //   return response.data;
+    
     } catch (error) {
       console.log(error,"error getting");
       return error.response.data.message;
@@ -35,6 +20,14 @@ export const getCollection = createAsyncThunk(
 const GetCollectionSlice = createSlice({
   name: "getCollection",
   initialState,
+  reducers: {
+    setCollections: (state, action) => {
+      state.collections = action.payload;
+    },
+    setDefaultCollections: (state, action) => {
+      state.defaultCollections = action.payload;
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getCollection.fulfilled, (state, action) => {
@@ -52,6 +45,8 @@ const GetCollectionSlice = createSlice({
 });
 
 export const { setToken } = GetCollectionSlice.actions;
+export const { setCollections } = GetCollectionSlice.actions;
+export const {setDefaultCollections} =GetCollectionSlice.actions
 
 const GetCollectionReducer = GetCollectionSlice.reducer;
 export default GetCollectionReducer;

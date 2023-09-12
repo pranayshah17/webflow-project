@@ -67,9 +67,7 @@ import { userRegister } from "./RegisterSlice";
           navigate("/login");
           })
           .catch((error) => {
-            // Handle login error, e.g., display an error message
             console.log("Error during login:", error.data);
-            // setLoginError("Invalid email or password");
           });
       },
     });
